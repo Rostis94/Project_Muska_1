@@ -5,6 +5,7 @@
 # Символы: Alt + NumPad (26 →, 25 ↓)
 # Запустить код: F5
 # Подсказка: Ctrl + Space
+# Перенос строки \n
 
 import numpy
 import matplotlib.pyplot as plt
