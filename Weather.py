@@ -1,5 +1,7 @@
 from pyowm.owm import OWM
 from pyowm.utils import config as cfg
+from datetime import datetime
+from telebot import TeleBot
 import Secrets
 
 config = cfg.get_default_config()
@@ -30,6 +32,27 @@ def ask_weather_at_place():
 
 
 # Извлекаем нулевой элемент кортежа
-print(get_weather('Ярославль')[0])
+# print(get_weather('Ярославль')[0])
+# ask_weather_at_place()
 
-ask_weather_at_place()
+bot = TeleBot(Secrets.telegram_bot_api_key)
+
+
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    bot.reply_to(
+        message, "Привет!\n" +
+        "Напиши мне название города и я скажу тебе какая там температура")
+
+
+@bot.message_handler(content_types=['text'])
+def send_weather(message):
+    place = message.text
+    print(f'{datetime.now():%H:%M:%S} чат {message.chat.id} пользователь {message.from_user.first_name} сообщение: {message.text}')
+    bot.send_message(message.chat.id, get_weather(place)[0])
+
+
+bot.polling()
+# в случае ошибки добавить аргумент (none_stop = True)
+
+# https://core.telegram.org/bots/api#available-types
